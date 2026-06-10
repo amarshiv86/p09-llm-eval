@@ -12,7 +12,6 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 import uuid
 from datetime import datetime, timezone
@@ -90,7 +89,7 @@ def main():
     )
     print(f"\nRegression: {regression['reason']}")
 
-    report = generate_report(run_id, summary, results_dicts, regression, args.report_path)
+    generate_report(run_id, summary, results_dicts, regression, args.report_path)
     print(f"Report: {args.report_path}")
 
     if regression["has_regression"]:

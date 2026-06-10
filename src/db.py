@@ -4,11 +4,9 @@ SQLite-based score tracking for regression detection.
 Zero infra — single file, works everywhere.
 """
 
-import json
 import os
 import sqlite3
 from datetime import datetime, timezone
-from typing import Optional
 
 
 DB_PATH = os.environ.get("EVAL_DB_PATH", "data/processed/eval_history.db")

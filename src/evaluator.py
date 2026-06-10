@@ -6,7 +6,6 @@ Evaluates LLM responses using three methods:
 3. Custom SRE rubric (domain-specific scoring)
 """
 
-import json
 import re
 import time
 from dataclasses import dataclass, field

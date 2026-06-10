@@ -3,12 +3,11 @@ P09 · Eval Reporter
 Generates markdown report and CI gate decision.
 """
 
-import json
 import os
 import sys
 from datetime import datetime, timezone
 
-from .db import check_regression, save_run
+from .db import check_regression, get_recent_runs
 
 
 def generate_report(
@@ -29,8 +28,8 @@ def generate_report(
         "",
         "## Summary",
         "",
-        f"| Metric | Value |",
-        f"|--------|-------|",
+        "| Metric | Value |",
+        "|--------|-------|",
         f"| Total test cases | {summary.get('total', 0)} |",
         f"| Passed | {summary.get('passed', 0)} ({summary.get('pass_rate', 0)}%) |",
         f"| Avg composite score | {summary.get('avg_composite', 0):.2f} / 10 |",
