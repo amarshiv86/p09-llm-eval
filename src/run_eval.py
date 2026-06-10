@@ -72,7 +72,7 @@ def main():
     summary["model_name"] = args.model_name
     summary["dataset"] = args.dataset
 
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Pass rate: {summary['pass_rate']}%")
     print(f"  Avg composite: {summary['avg_composite']:.2f}/10")
     print(f"  Avg ROUGE-1: {summary['avg_rouge1']:.4f}")

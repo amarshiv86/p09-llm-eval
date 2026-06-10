@@ -7,7 +7,7 @@ import os
 import sys
 from datetime import datetime, timezone
 
-from .db import check_regression, get_recent_runs
+from .db import check_regression, get_recent_runs  # noqa: F401 used in run_ci_gate
 
 
 def generate_report(
@@ -100,8 +100,6 @@ def run_ci_gate(db_path: str = "data/processed/eval_history.db") -> int:
     Returns exit code: 0 = pass, 1 = regression detected.
     Called by GitHub Actions eval workflow.
     """
-    from .db import get_recent_runs
-
     runs = get_recent_runs(1, db_path)
     if not runs:
         print("No eval runs found — skipping gate")
@@ -110,12 +108,12 @@ def run_ci_gate(db_path: str = "data/processed/eval_history.db") -> int:
     latest = runs[0]
     regression = check_regression(latest["avg_composite"], db_path)
 
-    print(f"\n── CI Gate ────────────────────────────")
+    print("\n── CI Gate ────────────────────────────")
     print(f"Run ID:   {latest['run_id']}")
     print(f"Score:    {latest['avg_composite']:.2f} / 10")
     print(f"Pass rate: {latest['pass_rate']}%")
     print(f"Status:   {regression['reason']}")
-    print(f"───────────────────────────────────────\n")
+    print("───────────────────────────────────────\n")
 
     if regression["has_regression"]:
         print("❌ CI GATE FAILED — score regression detected")
