@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install rouge-score pytest pytest-asyncio ruff
+
+      - name: Verify pytest available
+        run: pytest --version
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
+
+      - name: Lint with ruff
+        run: ruff check src/ tests/
+
+  eval:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install rouge-score
+
+      - name: Run eval on test cases
+        run: python -m src.run_eval --dataset data/raw/test_cases.jsonl --run-id ci-${{ github.sha }}
+
+      - name: CI gate — check for regression
+        run: python -m src.reporter --ci
+        continue-on-error: true
